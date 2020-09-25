@@ -18,11 +18,11 @@ class ProductionConfig:
 
 class TestingConfig:
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:mdark1001@localhost:3306/viajes'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:passord@localhost:3306/db'
     SQLALCHEMY_ECHO = False
 
 
 class DevelopmentConfig:
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:mdark1001@localhost:3306/viajes'
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:mdark1001@localhost:3306/homework'
     SQLALCHEMY_ECHO = False

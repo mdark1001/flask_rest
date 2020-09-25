@@ -7,6 +7,8 @@
 import os
 
 import logging
+import sys
+
 from flask import Flask, jsonify
 from api.utils.database import db
 from api.config.config import *
@@ -26,6 +28,11 @@ else:
 
 def create_app():
     app = Flask(__name__)
+    app.config.from_object(app_config)
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
+
     app.register_blueprint(author_routes, url_prefix='/api/authors')
 
     @app.after_request
@@ -48,9 +55,13 @@ def create_app():
         return response_with(resp.SERVER_ERROR_404)
 
     db.init_app(app)
-    app.config.from_object(app_config)
+
     with app.app_context():
         db.create_all()
+    logging.basicConfig(stream=sys.stdout,
+                        format='%(asctime)s | %(levelname)s | %(filename)s | %(lineno)s | %(message)s',
+                        level=logging.DEBUG)
+
     return app
 
 
