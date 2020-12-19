@@ -15,7 +15,8 @@ from api.config.config import *
 from api.utils.responses import response_with
 import api.utils.status_responses as resp
 from api.blueprits.author import author_routes
-
+from api.blueprits.user_route import user_routes
+from flask_jwt_extended import JWTManager
 # logging = logging(__name__)
 
 if os.environ.get('WORK_ENV') == 'PROD':
@@ -29,11 +30,13 @@ else:
 def create_app():
     app = Flask(__name__)
     app.config.from_object(app_config)
+
     db.init_app(app)
     with app.app_context():
         db.create_all()
 
     app.register_blueprint(author_routes, url_prefix='/api/authors')
+    app.register_blueprint(user_routes,url_prefix='/api/users')
 
     @app.after_request
     def add_header(response):
@@ -54,6 +57,7 @@ def create_app():
         logging.error(e)
         return response_with(resp.SERVER_ERROR_404)
 
+    jwt = JWTManager(app)
     db.init_app(app)
 
     with app.app_context():

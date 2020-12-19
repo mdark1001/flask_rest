@@ -10,12 +10,13 @@ import logging
 from api.utils.responses import response_with
 import api.utils.status_responses  as resp
 from api.models.author import AuthorSchema, Author
+from flask_jwt_extended import jwt_required
 
-_logger = logging.getLogger(__name__)
 author_routes = Blueprint("author_routes", __name__)
 
 
 @author_routes.route('/', methods=['POST'])
+@jwt_required
 def create_author():
     try:
         data = request.get_json()
@@ -30,6 +31,7 @@ def create_author():
 
 
 @author_routes.route('/', methods=['GET'])
+@jwt_required
 def get_authors():
     fetched = Author.query.all()
     author_schema = AuthorSchema(many=True, only=['id', 'first_name', 'last_name'])
@@ -39,6 +41,7 @@ def get_authors():
 
 
 @author_routes.route('/<int:author_id>', methods=['GET'])
+@jwt_required
 def ger_author_by_id(author_id):
     fetched = Author.query.get_or_404(author_id)
     author_schema = AuthorSchema()
